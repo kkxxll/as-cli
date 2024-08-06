@@ -12,13 +12,13 @@ const {
   NPM_NAME,
 } = require("../libs/const");
 
-async function prepare() {
+async function prepare(allStores) {
   checkPkgVersion(); // 检查当前运行版本
   checkNodeVersion(); // 检查 node 版本
   checkRoot(); // 检查是否为 root 启动
   checkUserHome(); // 检查用户主目录
   checkInputArgs(); // 检查用户输入参数
-  checkEnv(); // 检查环境变量
+  checkEnv(allStores); // 检查环境变量
   await checkGlobalUpdate(); // 检查工具是否需要更新
 }
 
@@ -36,14 +36,14 @@ async function checkGlobalUpdate() {
   }
 }
 
-function checkEnv() {
+function checkEnv(allStores) {
   log.verbose("开始检查环境变量");
   const dotenv = require("dotenv");
   dotenv.config({
     path: path.resolve(userHome, ".env"),
   });
-  config = createCliConfig(); // 准备基础配置
-  log.verbose("环境变量", config);
+  allStores.config = createCliConfig(); // 准备基础配置
+  log.verbose("环境变量", allStores.config);
 }
 
 function createCliConfig() {
